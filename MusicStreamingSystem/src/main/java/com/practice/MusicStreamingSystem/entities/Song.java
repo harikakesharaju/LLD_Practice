@@ -1,40 +1,45 @@
 package com.practice.MusicStreamingSystem.entities;
 
-import java.util.List;
+import java.util.Objects;
 
-public class Song implements Playable {
-	private final String id;
-	private final String title;
-	private final Artist artist;
-	private final int duration; // in seconds
+public class Song {
 
-	public Song(String id, String title, Artist artist, int duration) {
-		this.id = id;
-		this.title = title;
-		this.artist = artist;
-		this.duration = duration;
-	}
+    private final String title;
+    private final Artist artist;
+    private final String genre;
+    private final int durationSeconds;
 
-	public String getId() {
-		return id;
-	}
+    public Song(String title, Artist artist, String genre, int durationSeconds) {
+        if (title == null || title.isBlank()) {
+            throw new IllegalArgumentException("Song title cannot be empty");
+        }
+        if (durationSeconds <= 0) {
+            throw new IllegalArgumentException("Duration must be positive");
+        }
+        this.title = title;
+        this.artist = Objects.requireNonNull(artist);
+        this.genre = Objects.requireNonNull(genre);
+        this.durationSeconds = durationSeconds;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public Artist getArtist() {
-		return artist;
-	}
+    public Artist getArtist() {
+        return artist;
+    }
 
-	public int getDuration() {
-		return duration;
-	}
+    public String getGenre() {
+        return genre;
+    }
 
-	@Override
-	public List<Song> getTracks() {
-		return List.of(this);
-	}
+    public int getDurationSeconds() {
+        return durationSeconds;
+    }
 
-	
+    @Override
+    public String toString() {
+        return title + " - " + artist.getName();
+    }
 }

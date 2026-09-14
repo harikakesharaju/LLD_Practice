@@ -5,21 +5,24 @@ import com.practice.MusicStreamingSystem.enums.PlayerStatus;
 
 public class StoppedState implements PlayerState {
 
-	@Override
-	public void play(Player player) {
-		System.out.println("Player is now playing.");
-		player.changeState(new PlayingState());
-		player.setStatus(PlayerStatus.PLAYING);
-	}
+    @Override
+    public void play(Player player) {
+        player.playCurrentSongInQueue();
+        player.setState(new PlayingState());
+    }
 
-	@Override
-	public void pause(Player player) {
-		System.out.println("Player is already stopped. Cannot pause.");
-	}
+    @Override
+    public void pause(Player player) {
+        System.out.println("Cannot pause. Player is stopped.");
+    }
 
-	@Override
-	public void stop(Player player) {
-		System.out.println("Player is already stopped.");
-	}
+    @Override
+    public void next(Player player) {
+        player.nextTrack();
+    }
 
+    @Override
+    public PlayerStatus getStatus() {
+        return PlayerStatus.STOPPED;
+    }
 }

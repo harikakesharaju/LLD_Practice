@@ -1,0 +1,27 @@
+package com.practice.MusicStreamingSystem.state;
+
+import com.practice.MusicStreamingSystem.entities.Player;
+import com.practice.MusicStreamingSystem.enums.PlayerStatus;
+
+public class PlayingState implements PlayerState {
+
+	@Override
+	public void play(Player player) {
+		System.out.println("Already playing.");
+	}
+
+	@Override
+	public void pause(Player player) {
+		System.out.println("Pausing playback.");
+		player.changeState(new PausedState());
+		player.setStatus(PlayerStatus.PAUSED);
+	}
+
+	@Override
+	public void stop(Player player) {
+		System.out.println("Stopping playback.");
+		player.changeState(new StoppedState());
+		player.setStatus(PlayerStatus.STOPPED);
+	}
+
+}

@@ -1,62 +1,70 @@
 package com.practice.MusicStreamingSystem.entities;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
+import com.practice.MusicStreamingSystem.enums.SubscriptionTier;
 import com.practice.MusicStreamingSystem.observer.ArtistObserver;
-import com.practice.MusicStreamingSystem.strategy.playback.PlaybackStrategy;
 
-public class User implements ArtistObserver{
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-	private final String id;
-	private final String name;
-	private final PlaybackStrategy playbackStrategy;
-	private final Set<Artist> followedArtists=new HashSet<>();
-	
-	private User(String id,String name, PlaybackStrategy playbackStrategy){
-		this.id=id;
-		this.name=name;
-		this.playbackStrategy=playbackStrategy;
-	}
-	
-	public String getId() {
-		return id;
-	}
-	public String getName() {
-		return name;
-	}
-	
-	public PlaybackStrategy getPlaybackStrategy() {
-		return playbackStrategy;
-	}
-	
-	public void followArtist(Artist artist) {
-		followedArtists.add(artist);
-		artist.addObserver(this);
-	}
-	
-	@Override
-	public void update(Artist artist, Album album) {
-		System.out.println("User "+name+" notified about new album "+((Album)album).getTitle()+" by artist "+artist.getName());
-	}
-	
-	public static class UserBuilder{
-		private String id;
-		private String name;
-		private PlaybackStrategy playbackStrategy;
-		
-		public UserBuilder(String name) {
-			this.name = name;
-			this.id=UUID.randomUUID().toString();
-		}
-		public UserBuilder setPlaybackStrategy(PlaybackStrategy playbackStrategy) {
-			this.playbackStrategy = playbackStrategy;
-			return this;
-		}
-		
-		public User build() {
-			return new User(id,name,playbackStrategy);
-		}
-	}
+public class User implements ArtistObserver {
+
+    private final String name;
+    private SubscriptionTier subscriptionTier;
+    private final Set<Artist> followedArtists = new HashSet<>();
+    private final List<Song> playHistory = new ArrayList<>();
+    private final List<String> notifications = new ArrayList<>();
+
+    public User(String name, SubscriptionTier subscriptionTier) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("User name cannot be empty");
+        }
+        this.name = name;
+        this.subscriptionTier = subscriptionTier;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public SubscriptionTier getSubscriptionTier() {
+        return subscriptionTier;
+    }
+
+    public void setSubscriptionTier(SubscriptionTier subscriptionTier) {
+        this.subscriptionTier = subscriptionTier;
+    }
+
+    public void followArtist(Artist artist) {
+        if (artist != null) followedArtists.add(artist);
+    }
+
+    public void unfollowArtist(Artist artist) {
+        followedArtists.remove(artist);
+        if (artist != null) artist.removeObserver(this);
+    }
+
+    public void addToHistory(Song song) {
+        if (song != null) playHistory.add(song);
+    }
+
+    public List<Song> getPlayHistory() {
+        return List.copyOf(playHistory);
+    }
+
+    public List<String> getNotifications() {
+        return List.copyOf(notifications);
+    }
+
+    @Override
+    public void update(String message) {
+        notifications.add(message);
+        System.out.println("[NOTIFICATION -> " + name + "] " + message);
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + subscriptionTier + ")";
+    }
 }
