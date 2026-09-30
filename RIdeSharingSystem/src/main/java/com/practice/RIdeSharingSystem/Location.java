@@ -5,6 +5,10 @@ public class Location {
 	private double latitude;
 	private double longitude;
 	
+	public Location(int i, int j) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public double distanceTo(Location other) {
 		double latDiff = this.latitude - other.latitude;
 		double lonDiff = this.longitude - other.longitude;

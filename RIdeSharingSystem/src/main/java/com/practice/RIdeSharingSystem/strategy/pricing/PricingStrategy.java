@@ -6,6 +6,6 @@ import com.practice.RIdeSharingSystem.enums.VehicleType;
 
 public interface PricingStrategy {
 
-	 double calculateFare(Location loc,VehicleType vehicleType,Driver d);
+	 double calculateFare(Location from,Location to, VehicleType vehicleTyper);
 	 
 }

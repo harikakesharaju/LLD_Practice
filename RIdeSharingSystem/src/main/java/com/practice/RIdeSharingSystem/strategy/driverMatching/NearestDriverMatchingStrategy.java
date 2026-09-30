@@ -11,16 +11,12 @@ public class NearestDriverMatchingStrategy implements DriverMatchingStrategy {
 
 	@Override
 	public Driver findDriver(Location fromLocation, List<Driver> availableDrivers, VehicleType vehicleType) {
-		Driver nearestDriver = null;
-		double minDistance = Double.MAX_VALUE;
 
 		return availableDrivers.stream()
-				.filter(driver -> driver.vehicleType == vehicleType)
-				.filter(driver -> driver.status == DriverStatus.AVAILABLE)
-				.min((driver1, driver2) -> Double.compare(driver1.currentLocation.distanceTo(fromLocation),
-						driver2.currentLocation.distanceTo(fromLocation)))
+				.filter(driver -> driver.getVehicleType() == vehicleType)
+				.filter(driver -> driver.getStatus() == DriverStatus.AVAILABLE)
+				.min((d1, d2) -> Double.compare(d1.getCurrentLocation().distanceTo(fromLocation),
+						d2.getCurrentLocation().distanceTo(fromLocation)))
 				.orElse(null);
-
 	}
-
 }

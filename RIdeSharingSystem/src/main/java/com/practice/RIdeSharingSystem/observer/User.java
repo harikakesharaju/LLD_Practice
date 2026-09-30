@@ -16,10 +16,13 @@ public abstract class User implements TripObserver {
 		this.contact = contact;
 	}
 
-	void addTripToHistory(Ride trip) {
+	public void addTripToHistory(Ride trip) {
 		tripHistory.add(trip);
 	}
 	
+	public List<Ride> getTripHistory() {
+	    return tripHistory;
+	}
 
 
 }
